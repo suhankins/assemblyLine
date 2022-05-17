@@ -3,6 +3,8 @@ package assemblyline;
 import java.util.Arrays;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import assemblyline.commands.Command;
 import assemblyline.utils.ErrorMessages;
@@ -44,14 +46,18 @@ public class Server {
         }
 
         //=============== Initial message ===============
-        IO.print("Lab4 'assemblyline'%nUse 'help' command to see list of commands.%n%n");
+        IO.print("Assemblyline v2.0%nListening to port %d%n%n", serverSocket.getLocalPort());
 
         //=============== Handling user input ===============
         while (true) {
             try {
-                System.out.print("> ");
                 Socket socket = serverSocket.accept();
-                System.out.print("WE GOT SOMETHING");
+                BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(
+                        socket.getInputStream()
+                    )
+                );
+                System.out.print(reader.readLine());
                 userInput = IO.nextLine().split(" ");
                 //All commands are lower case, and I don't want people to suffer from not knowing it
                 userInput[0] = userInput[0].toLowerCase();
