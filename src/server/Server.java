@@ -51,6 +51,7 @@ public class Server {
         //=============== Handling user input ===============
         while (true) {
             try {
+                /*
                 Socket socket = serverSocket.accept();
                 BufferedReader reader = new BufferedReader(
                     new InputStreamReader(
@@ -58,6 +59,7 @@ public class Server {
                     )
                 );
                 System.out.print(reader.readLine());
+                */
                 userInput = IO.nextLine().split(" ");
                 //All commands are lower case, and I don't want people to suffer from not knowing it
                 userInput[0] = userInput[0].toLowerCase();
