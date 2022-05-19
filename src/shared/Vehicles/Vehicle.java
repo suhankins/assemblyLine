@@ -2,11 +2,15 @@ package assemblyline.vehicles;
 
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.time.LocalDate;
 
+import assemblyline.VehicleCollection;
 import assemblyline.utils.ValueOutOfRangeException;
 import assemblyline.utils.NotEmptyException;
 import assemblyline.utils.NotNullException;
 import assemblyline.utils.IO;
+
+import org.json.JSONObject;
 
 public class Vehicle implements Comparable<Vehicle> {
     /**
@@ -67,16 +71,16 @@ public class Vehicle implements Comparable<Vehicle> {
         return this.coordinates;
     }
     public int getEnginePower() {
-        return enginePower;
+        return this.enginePower;
     }
     public int getNumberOfWheels() {
-        return numberOfWheels;
+        return this.numberOfWheels;
     }
     public VehicleType getVehicleType() {
-        return type;
+        return this.type;
     }
     public FuelType getFuelType() {
-        return fuelType;
+        return this.fuelType;
     }
     public String getName() {
         return this.name;
@@ -159,6 +163,7 @@ public class Vehicle implements Comparable<Vehicle> {
         }
     }
     /**
+     * Sets creation date
      * This is only used for loading vehicles from JSON
      */
     public void setCreationDate(java.time.LocalDate date) {
@@ -262,6 +267,47 @@ public class Vehicle implements Comparable<Vehicle> {
         this.numberOfWheels = numberOfWheels;
         this.type = vehicleType;
         this.fuelType = fuelType;
+    }
+
+    /**
+     * Converts vehicle to JSON object
+     * @return JSON object
+     */
+    public JSONObject toJSON(){
+        JSONObject vehicleJSON = new JSONObject();
+        vehicleJSON.put("name", this.name);
+        vehicleJSON.put("id", this.id);
+        vehicleJSON.put("coordinates", this.coordinates.toJSON());
+        vehicleJSON.put("enginePower", this.enginePower);
+        vehicleJSON.put("numberOfWheels", this.numberOfWheels);
+        vehicleJSON.put("vehicleType", this.type.toString());
+        vehicleJSON.put("fuelType", this.fuelType.toString());
+        vehicleJSON.put("creationDate", this.creationDate.toString());
+        return vehicleJSON;
+    }
+
+    /**
+     * Vehicle factory
+     * @param json json object you want to use to create a vehicle object
+     * @return new vehicle object
+     */
+    public static Vehicle fromJSON(JSONObject json) {
+        Vehicle vehicle = new Vehicle(
+            json.getString("name"),
+            Coordinates.fromJSON(json.getJSONObject("coordinates")),
+            json.getInt("enginePower"),
+            json.getInt("numberOfWheels"),
+            VehicleType.valueOf(json.getString("vehicleType")),
+            FuelType.valueOf(json.getString("fuelType"))
+        );
+        Integer id = json.getInt("id");
+        //If given ID already exists, we throw an error
+        if (VehicleCollection.getById(id) != null) {
+            throw new ValueOutOfRangeException();
+        }
+        vehicle.setId(id);
+        vehicle.setCreationDate(LocalDate.parse(json.getString("creationDate")));
+        return vehicle;
     }
 
     @Override

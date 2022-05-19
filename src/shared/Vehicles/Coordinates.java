@@ -2,8 +2,16 @@ package assemblyline.vehicles;
 
 import assemblyline.utils.ValueOutOfRangeException;
 
+import org.json.JSONObject;
+
 public class Coordinates {
+    /**
+     * Maximum allowed X value
+     */
     public final static double MAX_X = 591;
+    /**
+     * Maximum allowed Y value
+     */
     public final static long MAX_Y = 387;
     /**
      * * Max value: 591
@@ -69,6 +77,29 @@ public class Coordinates {
         if (!isYCorrect(y)) throw new ValueOutOfRangeException((int)MAX_Y, true, "Y");
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * Converts coodinates to JSON object
+     * @return JSON Object
+     */
+    public JSONObject toJSON()
+    {
+        JSONObject coordinatesJSON = new JSONObject();
+        coordinatesJSON.put("x", this.x);
+        coordinatesJSON.put("y", this.y);
+        return coordinatesJSON;
+    }
+
+    /**
+     * Coordinates factory
+     * @param json json object you want to use to create a coordinates object
+     * @return new coordinates object
+     */
+    public static Coordinates fromJSON(JSONObject json) {
+        Double x = json.getDouble("x");
+        Long y = json.getLong("y");
+        return new Coordinates(x, y);
     }
 
     @Override

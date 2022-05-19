@@ -2,8 +2,11 @@ package assemblyline;
 
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.time.LocalDate;
 
 import assemblyline.vehicles.Vehicle;
+
+import org.json.JSONObject;
 
 /**
  * Class for storing all created vehicles
@@ -17,7 +20,7 @@ public class VehicleCollection {
      * Vehicle collection initialization date
      * If null - vehicle collection was never initialized.
      */
-    public static java.time.LocalDate initializationDate = null;
+    public static LocalDate initializationDate = null;
 
     /**
      * Get vehicle from vehicle collection by its id
@@ -60,5 +63,36 @@ public class VehicleCollection {
         }
 
         return vehicles;
+    }
+
+    /**
+     * Converts the whole collection to JSON
+     * All vehicles are stored in vehicles
+     * @return collection converted to JSON
+     */
+    public static JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("initializationDate", initializationDate.toString());
+        JSONObject vehicles = new JSONObject();
+        Enumeration keys = vehicleCollection.keys();
+        while (keys.hasMoreElements()) {
+            int k = (int)keys.nextElement();
+            vehicles.put(Integer.toString(k), vehicleCollection.get(k).toJSON());
+        }
+        json.put("vehicles", vehicles);
+        return json;
+    }
+
+    public static void fromJSON(JSONObject json) {
+        initializationDate = LocalDate.parse(json.getString("initializationDate"));
+        JSONObject vehicles = json.getJSONObject("vehicles");
+        String[] names = JSONObject.getNames(vehicles);
+        for (int i = 0; i < names.length; i++) {
+            String name = names[i];
+            vehicleCollection.put(
+                Integer.parseInt(name), 
+                Vehicle.fromJSON(vehicles.getJSONObject(name))
+            );
+        }
     }
 }
