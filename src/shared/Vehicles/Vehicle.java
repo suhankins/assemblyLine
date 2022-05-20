@@ -289,9 +289,10 @@ public class Vehicle implements Comparable<Vehicle> {
     /**
      * Vehicle factory
      * @param json json object you want to use to create a vehicle object
+     * @param trusted if set to false, id and and creation date fields will be ignored
      * @return new vehicle object
      */
-    public static Vehicle fromJSON(JSONObject json) {
+    public static Vehicle fromJSON(JSONObject json, boolean trusted) {
         Vehicle vehicle = new Vehicle(
             json.getString("name"),
             Coordinates.fromJSON(json.getJSONObject("coordinates")),
@@ -300,13 +301,15 @@ public class Vehicle implements Comparable<Vehicle> {
             VehicleType.valueOf(json.getString("vehicleType")),
             FuelType.valueOf(json.getString("fuelType"))
         );
-        Integer id = json.getInt("id");
-        //If given ID already exists, we throw an error
-        if (VehicleCollection.getById(id) != null) {
-            throw new ValueOutOfRangeException();
+        if (trusted) {
+            Integer id = json.getInt("id");
+            //If given ID already exists, we throw an error
+            if (VehicleCollection.getById(id) != null) {
+                throw new ValueOutOfRangeException();
+            }
+            vehicle.setId(id);
+            vehicle.setCreationDate(LocalDate.parse(json.getString("creationDate")));
         }
-        vehicle.setId(id);
-        vehicle.setCreationDate(LocalDate.parse(json.getString("creationDate")));
         return vehicle;
     }
 

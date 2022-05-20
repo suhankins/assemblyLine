@@ -91,7 +91,7 @@ public class VehicleCollection {
             String name = names[i];
             vehicleCollection.put(
                 Integer.parseInt(name), 
-                Vehicle.fromJSON(vehicles.getJSONObject(name))
+                Vehicle.fromJSON(vehicles.getJSONObject(name), true)
             );
         }
     }
