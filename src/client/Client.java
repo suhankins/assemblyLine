@@ -1,14 +1,22 @@
 package assemblyline;
 
+import java.io.Console;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import assemblyline.commands.Command;
 import assemblyline.utils.ErrorMessages;
 import assemblyline.utils.FeatureNotImplementedException;
 import assemblyline.utils.FileManager;
 import assemblyline.utils.IO;
+
+import org.json.JSONObject;
 
 /**
 * The client part of AssemblyLine
@@ -20,34 +28,19 @@ public class Client {
     public static void main(String[] args) {
         //=============== Initialization ===============
         String[] userInput;
-        //=============== Save file loading routine ===============
-        try {
-            if (args.length > 0) { 
-                FileManager.loadSave(args[0]);
-            }
-        } catch (FeatureNotImplementedException exception) {
-            IO.print("File loading routine is still not implemented! Implement it already, you idiot!%n");
-        } catch (Exception exception) {
-            IO.print(ErrorMessages.TEMPLATE, exception.getMessage());
-            //If there was some error with loading the collection, we better get rid of what we already loaded
-            VehicleCollection.vehicleCollection.clear();
-            VehicleCollection.initializationDate = null;
-        }
 
         //=============== Initial message ===============
-        IO.print("Lab4 'assemblyline'%nUse 'help' command to see list of commands.%n%n");
+        IO.print("Assemblyline v2.0 CLIENT%nUse 'help' command to see list of commands.%n%n");
         SocketChannel socketChannel;
         InetSocketAddress serverAddress;
         try {
-            socketChannel = SocketChannel.open();
             serverAddress = new InetSocketAddress("localhost", 80);
-            socketChannel.connect(serverAddress);
         } catch(Exception e) {
             IO.print(e.getMessage());
             //if we can't connect to the server we might as well just give up 
             return;
         }
-        IO.print("Connected to %s:%d%n", serverAddress.getHostString(), serverAddress.getPort());
+        IO.print("Server: %s:%d%n", serverAddress.getHostString(), serverAddress.getPort());
         //=============== Handling user input ===============
         while (true) {
             System.out.print("> ");
@@ -57,10 +50,49 @@ public class Client {
             userInput[0] = userInput[0].toLowerCase();
 
             try {
+                JSONObject output = null;
                 if (userInput.length > 1) {
-                    Command.executeCommand(userInput[0], Arrays.copyOfRange(userInput, 1, userInput.length));
+                    output = Command.requestCommand(userInput[0], Arrays.copyOfRange(userInput, 1, userInput.length));
                 } else {
-                    Command.executeCommand(userInput[0]);
+                    output = Command.requestCommand(userInput[0]);
+                }
+                //Some command (like exit) don't require any communication with the server
+                if (output != null) {
+                    //Request
+                    socketChannel = SocketChannel.open();
+                    socketChannel.connect(serverAddress);
+
+                    String text = output.toString() + "\n";
+                    byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
+                    ByteBuffer buffer = ByteBuffer.wrap(bytes);
+
+                    while(buffer.hasRemaining()) {
+                        socketChannel.write(buffer);
+                    }
+                    
+                    //Response
+                    //This is ridicilous
+                    //I couldn't easily convert bytebuffer to string, so I did this hell
+                    buffer = ByteBuffer.allocate(2048);
+                    int bytesRead = socketChannel.read(buffer);
+                    List<Byte> noNulls = new ArrayList<>();
+                    for (int i = 0; i < buffer.capacity(); i++) {
+                        if (buffer.get(i) == 0) {
+                            break;
+                        }
+                        noNulls.add(buffer.get(i));
+                    }
+                    bytes = new byte[noNulls.size()];
+                    for (int i = 0; i < noNulls.size(); i++) {
+                        bytes[i] = noNulls.get(i);
+                    }
+                    socketChannel.close();
+                    //React
+                    Command.reactCommand(
+                        new JSONObject(
+                            new String(bytes, "UTF-8")
+                        )
+                    );
                 }
             } catch(java.util.InputMismatchException e) {
                 IO.print("ERROR: Wrong type of data was inputted%n");

@@ -4,13 +4,19 @@ import java.util.Arrays;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 import assemblyline.commands.Command;
 import assemblyline.utils.ErrorMessages;
 import assemblyline.utils.FeatureNotImplementedException;
 import assemblyline.utils.FileManager;
 import assemblyline.utils.IO;
+
+import org.json.JSONObject;
 
 /**
 * The server part of AssemblyLine
@@ -25,7 +31,7 @@ public class Server {
     private static int port = 80;
     public static void main(String[] args) {
         //=============== Initialization ===============
-        String[] userInput;
+        JSONObject userInput;
         //=============== Save file loading routine ===============
         try {
             if (args.length > 0) { 
@@ -48,7 +54,7 @@ public class Server {
         }
 
         //=============== Initial message ===============
-        IO.print("Assemblyline v2.0%nListening to port %d%n%n", serverSocket.getLocalPort());
+        IO.print("Assemblyline v2.0 SERVER%nListening to port %d%n%n", serverSocket.getLocalPort());
 
         //=============== Handling user input ===============
         while (true) {
@@ -59,14 +65,19 @@ public class Server {
                         socket.getInputStream()
                     )
                 );
-                System.out.println(reader.readLine());
-                userInput = IO.nextLine().split(" ");
-                //All commands are lower case, and I don't want people to suffer from not knowing it
-                userInput[0] = userInput[0].toLowerCase();
-                if (userInput.length > 1) {
-                    Command.executeCommand(userInput[0], Arrays.copyOfRange(userInput, 1, userInput.length));
-                } else {
-                    Command.executeCommand(userInput[0]);
+                userInput = new JSONObject(reader.readLine());
+                IO.print("User requested command %s%n", userInput.getString("command"));
+                JSONObject output;
+                output = Command.respondCommand(userInput);
+                if (output != null) {
+                    BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(socket.getOutputStream(), "UTF-8")
+                    );
+
+                    writer.append(output.toString());
+                    
+                    writer.close();
+                    IO.print("Reponded to user%n");
                 }
             } catch(java.util.InputMismatchException e) {
                 IO.print("ERROR: Wrong type of data was inputted%n");

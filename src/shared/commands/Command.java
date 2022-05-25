@@ -5,6 +5,8 @@ import java.util.Hashtable;
 import assemblyline.utils.CommandDoesNotExistException;
 import assemblyline.utils.NoArgumentGivenException;
 
+import org.json.JSONObject;
+
 /**
  * Class for commands
  */
@@ -22,17 +24,21 @@ public abstract class Command {
     //Static initialization block
     static {
         commandList.put("help", new HelpCommand());
+        /*
         commandList.put("info", new InfoCommand());
         commandList.put("show", new ShowCommand());
         commandList.put("insert", new InsertCommand());
         commandList.put("update", new UpdateCommand());
         commandList.put("remove_key", new RemoveKeyCommand());
+        */
         commandList.put("clear", new ClearCommand());
+        /*
 
         commandList.put("save", new SaveCommand());
         commandList.put("execute_script", new ExecuteScriptCommand());
-
+        */
         commandList.put("exit", new ExitCommand());
+        /* 
         commandList.put("history", new HistoryCommand());
         commandList.put("replace_if_lower", new ReplaceIfLowerCommand());
         commandList.put("remove_lower_key", new RemoveLowerKeyCommand());
@@ -40,6 +46,7 @@ public abstract class Command {
         commandList.put("print_field_ascending_fuel_type", new PrintFieldSortedCommand("Fuel type", true));
         commandList.put("print_field_descending_engine_power", new PrintFieldSortedCommand("Engine power", false));
         commandList.put("print_field_descending_number_of_wheels", new PrintFieldSortedCommand("Number of wheels", false));
+        */
     }
 
     /**
@@ -55,22 +62,39 @@ public abstract class Command {
      * @param name command name
      * @param args list of arguments
      */
-    public static void executeCommand(String name, String[] args){
+    public static JSONObject requestCommand(String name, String[] args){
         if (!doesCommandExist(name)) {
             throw new CommandDoesNotExistException(name);
         }
 
-        commandList.get(name).execute(args);
-
         appendHistory(name);
+
+        return commandList.get(name).request(args);
     }
 
     /**
      * Execute a command without arguments
      * @param name command name
      */
-    public static void executeCommand(String name){
-        executeCommand(name, new String[0]);
+    public static JSONObject requestCommand(String name){
+        return requestCommand(name, new String[0]);
+    }
+    
+    /**
+     * Respond to user's command
+     * @param args user's request
+     * @return result of commands execution
+     */
+    public static JSONObject respondCommand(JSONObject args) {
+        return commandList.get(args.getString("command")).respond(args);
+    }
+    
+    /**
+     * React to data replied by server
+     * @param args Server's answer
+     */
+    public static void reactCommand(JSONObject args) {
+        commandList.get(args.getString("command")).react(args);
     }
 
     /**
@@ -106,10 +130,22 @@ public abstract class Command {
     //=============== Instance methods ===============
 
     /**
-     * Execute the command
+     * Execute the command on client side
      * @param args arguments
      */
-    public abstract void execute(String[] args);
+    public abstract JSONObject request(String[] args);
+
+    /**
+     * Execute the command on server side
+     * @param args JSONObject with arguments
+     */
+    public abstract JSONObject respond(JSONObject args);
+
+    /**
+     * Handle server's response on client side
+     * @param args JSONObject with arguments
+     */
+    public abstract void react(JSONObject args);
 
     /**
      * Get command's description

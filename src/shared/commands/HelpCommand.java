@@ -6,28 +6,51 @@ import java.util.Hashtable;
 import assemblyline.utils.CommandDoesNotExistException;
 import assemblyline.utils.IO;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class HelpCommand extends Command {
-    @Override
-    public void execute(String[] args) {
-        Hashtable<String, Command> commandList = Command.getCommandList();
-        if (args.length == 0) {
-            Enumeration keys = commandList.keys();
-            IO.print("List of commands:%n");
-            while (keys.hasMoreElements()) {
-                IO.print("%s%n", keys.nextElement());
-            }
+    public JSONObject request(String[] args) {
+        JSONObject output = new JSONObject().put("command", "help");
+        if (args.length >= 0) {
+            IO.print("Asking server for the list...%n");
         } else {
-            //commands can be lowercase
-            args[0] = args[0].toLowerCase();
-            if (!doesCommandExist(args[0])) {
-                throw new CommandDoesNotExistException(args[0]);
+            IO.print("Asking server for the description of %s command...%n", args[0]);
+            output.put("data", args[0]);
+        }
+        return output;
+    }
+
+    public JSONObject respond(JSONObject args) {
+        Hashtable<String, Command> commandList = Command.getCommandList();
+        JSONArray list = new JSONArray();
+        //if we were asked about a specific command, reply with its description
+        if (args.has("data")) {
+            String data = args.getString("data").toLowerCase();
+            if (!doesCommandExist(data)) {
+                throw new CommandDoesNotExistException(data);
             }
 
-            IO.print("%s%n", commandList.get(args[0]).getHelp());
+            list.put(commandList.get(data).getHelp());
+        } else {
+        //otherwise print the list of commands
+            Enumeration keys = commandList.keys();
+            while (keys.hasMoreElements()) {
+                list.put(keys.nextElement());
+            }
+        }
+
+        return new JSONObject().put("data", list).put("command", "help");
+    }
+
+    public void react(JSONObject args) {
+        IO.print("List of commands:%n");
+        JSONArray array = args.getJSONArray("data");
+        for (int i = 0; i < array.length(); i++) {
+            IO.print("%s%n", array.getString(i));
         }
     }
 
-    @Override
     public String getHelp() {
         return String.format("Prints description of a command given in an argument.%n%nUsage: help [command]%n%nIf no arguments are given, prints list of existing commands.%n%nUsage: help");
     }
