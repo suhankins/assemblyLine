@@ -19,6 +19,10 @@ import assemblyline.utils.IO;
 * @since   2022-02-14 
 */
 public class Server {
+    /**
+     * Port on which server should be initilialized. 
+     */
+    private static int port = 80;
     public static void main(String[] args) {
         //=============== Initialization ===============
         String[] userInput;
@@ -27,8 +31,6 @@ public class Server {
             if (args.length > 0) { 
                 FileManager.loadSave(args[0]);
             }
-        } catch (FeatureNotImplementedException exception) {
-            IO.print("File loading routine is still not implemented! Implement it already, you idiot!%n");
         } catch (Exception exception) {
             IO.print(ErrorMessages.TEMPLATE, exception.getMessage());
             //If there was some error with loading the collection, we better get rid of what we already loaded
@@ -39,7 +41,7 @@ public class Server {
         //=============== Starting up the server ===============
         ServerSocket serverSocket;
         try {
-            serverSocket = new ServerSocket(80);
+            serverSocket = new ServerSocket(port);
         } catch (Exception exception) {
             IO.print(ErrorMessages.TEMPLATE, exception.getMessage());
             return;
@@ -51,15 +53,13 @@ public class Server {
         //=============== Handling user input ===============
         while (true) {
             try {
-                /*
                 Socket socket = serverSocket.accept();
                 BufferedReader reader = new BufferedReader(
                     new InputStreamReader(
                         socket.getInputStream()
                     )
                 );
-                System.out.print(reader.readLine());
-                */
+                System.out.println(reader.readLine());
                 userInput = IO.nextLine().split(" ");
                 //All commands are lower case, and I don't want people to suffer from not knowing it
                 userInput[0] = userInput[0].toLowerCase();

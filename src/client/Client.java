@@ -1,5 +1,7 @@
 package assemblyline;
 
+import java.net.InetSocketAddress;
+import java.nio.channels.SocketChannel;
 import java.util.Arrays;
 
 import assemblyline.commands.Command;
@@ -34,7 +36,18 @@ public class Client {
 
         //=============== Initial message ===============
         IO.print("Lab4 'assemblyline'%nUse 'help' command to see list of commands.%n%n");
-
+        SocketChannel socketChannel;
+        InetSocketAddress serverAddress;
+        try {
+            socketChannel = SocketChannel.open();
+            serverAddress = new InetSocketAddress("localhost", 80);
+            socketChannel.connect(serverAddress);
+        } catch(Exception e) {
+            IO.print(e.getMessage());
+            //if we can't connect to the server we might as well just give up 
+            return;
+        }
+        IO.print("Connected to %s:%d%n", serverAddress.getHostString(), serverAddress.getPort());
         //=============== Handling user input ===============
         while (true) {
             System.out.print("> ");
