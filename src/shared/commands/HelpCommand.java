@@ -12,7 +12,7 @@ import org.json.JSONObject;
 public class HelpCommand extends Command {
     public JSONObject request(String[] args) {
         JSONObject output = new JSONObject().put("command", "help");
-        if (args.length >= 0) {
+        if (args.length == 0) {
             IO.print("Asking server for the list...%n");
         } else {
             IO.print("Asking server for the description of %s command...%n", args[0]);
@@ -44,8 +44,10 @@ public class HelpCommand extends Command {
     }
 
     public void react(JSONObject args) {
-        IO.print("List of commands:%n");
         JSONArray array = args.getJSONArray("data");
+        if (array.length() > 1) {
+            IO.print("List of commands:%n");
+        }
         for (int i = 0; i < array.length(); i++) {
             IO.print("%s%n", array.getString(i));
         }

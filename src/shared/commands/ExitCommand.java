@@ -9,7 +9,7 @@ public class ExitCommand extends Command {
     }
 
     public JSONObject respond(JSONObject args) {
-        System.exit(0);
+        //System.exit(0);
         return null;
     }
 
