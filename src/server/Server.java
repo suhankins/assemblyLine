@@ -19,32 +19,34 @@ import assemblyline.utils.IO;
 import org.json.JSONObject;
 
 /**
-* The server part of AssemblyLine
-*
-* @author  Dimitri Sukhankin
-* @since   2022-02-14 
-*/
+ * The server part of AssemblyLine
+ *
+ * @author Dimitri Sukhankin
+ * @since 2022-02-14
+ */
 public class Server {
     /**
-     * Port on which server should be initilialized. 
+     * Port on which server should be initilialized.
      */
     private static int port = 80;
+
     public static void main(String[] args) {
-        //=============== Initialization ===============
+        // =============== Initialization ===============
         JSONObject userInput;
-        //=============== Save file loading routine ===============
+        // =============== Save file loading routine ===============
         try {
-            if (args.length > 0) { 
+            if (args.length > 0) {
                 FileManager.loadSave(args[0]);
             }
         } catch (Exception exception) {
             IO.print(ErrorMessages.TEMPLATE, exception.getMessage());
-            //If there was some error with loading the collection, we better get rid of what we already loaded
+            // If there was some error with loading the collection, we better get rid of
+            // what we already loaded
             VehicleCollection.vehicleCollection.clear();
             VehicleCollection.initializationDate = null;
         }
 
-        //=============== Starting up the server ===============
+        // =============== Starting up the server ===============
         ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(port);
@@ -53,36 +55,48 @@ public class Server {
             return;
         }
 
-        //=============== Initial message ===============
+        // =============== Initial message ===============
         IO.print("Assemblyline v2.0 SERVER%nListening to port %d%n%n", serverSocket.getLocalPort());
 
-        //=============== Handling user input ===============
+        // =============== Handling user input ===============
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
                 BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(
-                        socket.getInputStream()
-                    )
-                );
+                        new InputStreamReader(
+                                socket.getInputStream()));
                 userInput = new JSONObject(reader.readLine());
                 IO.print("User requested command %s%n", userInput.getString("command"));
-                JSONObject output;
-                output = Command.respondCommand(userInput);
-                if (output != null) {
-                    BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream(), "UTF-8")
-                    );
+                try {
+                    JSONObject output;
+                    output = Command.respondCommand(userInput);
+                    if (output != null) {
+                        BufferedWriter writer = new BufferedWriter(
+                                new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 
-                    writer.append(output.toString());
-                    
+                        writer.append(output.toString());
+
+                        writer.close();
+                        IO.print("Reponded to user%n");
+                    }
+                } catch (Exception e) {
+                    BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+
+                    String errorText;
+
+                    if (e.getMessage() == null) {
+                        errorText = String.format(ErrorMessages.TEMPLATE, e.getClass());
+                    } else {
+                        errorText = String.format(ErrorMessages.TEMPLATE, e.getMessage());
+                    }
+
+                    writer.append(errorText);
+
                     writer.close();
-                    IO.print("Reponded to user%n");
+                    IO.print(errorText);
                 }
-            } catch(java.util.InputMismatchException e) {
-                IO.print("ERROR: Wrong type of data was inputted%n");
-            } catch(Exception e) {
-                //Apparently that can happen /shrug
+            } catch (Exception e) {
                 if (e.getMessage() == null) {
                     IO.print(ErrorMessages.TEMPLATE, e.getClass());
                 } else {

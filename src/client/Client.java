@@ -60,6 +60,7 @@ public class Client {
                 if (output != null) {
                     //Request
                     socketChannel = SocketChannel.open();
+                    //socketChannel.configureBlocking(false);
                     socketChannel.connect(serverAddress);
 
                     String text = output.toString() + "\n";
@@ -88,11 +89,13 @@ public class Client {
                     }
                     socketChannel.close();
                     //React
-                    Command.reactCommand(
-                        new JSONObject(
-                            new String(bytes, "UTF-8")
-                        )
-                    );
+                    String rawResponse = new String(bytes, "UTF-8");
+                    try {
+                        JSONObject response = new JSONObject(rawResponse);
+                        Command.reactCommand(response);
+                    } catch(Exception e) {
+                        IO.print(rawResponse);
+                    }
                 }
             } catch(java.util.InputMismatchException e) {
                 IO.print("ERROR: Wrong type of data was inputted%n");
