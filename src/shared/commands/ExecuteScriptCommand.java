@@ -2,21 +2,25 @@ package assemblyline.commands;
 
 import assemblyline.utils.FileManager;
 
+import org.json.JSONObject;
+
 /**
  * Executes script from a specified file
  */
 public class ExecuteScriptCommand extends Command {
-    public JSONObject execute(String[] args) {
+    public JSONObject request(String[] args) {
         isArgumentGiven(args);
         
         FileManager.loadScript(args[0]);
-
-        IO.print("Executing the script...%n");
         return null;
     }
 
-    public JSONObject execute(JSONObject args) {
-        execute(args.getString("data"));
+    public JSONObject respond(JSONObject args) {
+        return null;
+    }
+
+    public void react(JSONObject args) {
+        return;
     }
 
     public String getHelp() {
