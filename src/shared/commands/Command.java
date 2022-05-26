@@ -17,7 +17,7 @@ public abstract class Command {
     private static Hashtable<String, Command> commandList = new Hashtable<String, Command>();
 
     /**
-     * Used for history command. Stores last 12 successfully executed commands
+     * Used for history command. Stores last 12 executed commands
      */
     public static String[] history = new String[12];
 
@@ -27,7 +27,9 @@ public abstract class Command {
         /*
         commandList.put("info", new InfoCommand());
         commandList.put("show", new ShowCommand());
+        */
         commandList.put("insert", new InsertCommand());
+        /*
         commandList.put("update", new UpdateCommand());
         commandList.put("remove_key", new RemoveKeyCommand());
         */
@@ -35,11 +37,11 @@ public abstract class Command {
         /*
 
         commandList.put("save", new SaveCommand());
-        commandList.put("execute_script", new ExecuteScriptCommand());
         */
+        commandList.put("execute_script", new ExecuteScriptCommand());
         commandList.put("exit", new ExitCommand());
-        /* 
         commandList.put("history", new HistoryCommand());
+        /*
         commandList.put("replace_if_lower", new ReplaceIfLowerCommand());
         commandList.put("remove_lower_key", new RemoveLowerKeyCommand());
 
@@ -86,6 +88,7 @@ public abstract class Command {
      * @return result of commands execution
      */
     public static JSONObject respondCommand(JSONObject args) {
+        appendHistory(args.getString("command"));
         return commandList.get(args.getString("command")).respond(args);
     }
     
