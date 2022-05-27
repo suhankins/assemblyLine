@@ -11,14 +11,22 @@ import org.json.JSONObject;
 
 public class HelpCommand extends Command {
     public JSONObject request(String[] args) {
-        JSONObject output = new JSONObject().put("command", "help");
-        if (args.length == 0) {
-            IO.print("Asking server for the list...%n");
+        Hashtable<String, Command> commandList = Command.getCommandList();
+        if (args.length > 0) {
+            String data = args[0].toLowerCase();
+            if (!doesCommandExist(data)) {
+                throw new CommandDoesNotExistException(data);
+            }
+
+            IO.print(commandList.get(data).getHelp());
         } else {
-            IO.print("Asking server for the description of %s command...%n", args[0]);
-            output.put("data", args[0]);
+        //otherwise print the list of commands
+            Enumeration keys = commandList.keys();
+            while (keys.hasMoreElements()) {
+                IO.print("%s%n", (String)keys.nextElement());
+            }
         }
-        return output;
+        return null;
     }
 
     public JSONObject respond(JSONObject args) {
