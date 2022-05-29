@@ -52,7 +52,7 @@ public class InsertCommand extends Command {
     }
 
     public void react(JSONObject args) {
-        IO.print("New vehicle successfully added.");
+        IO.print("New vehicle successfully added.%n");
     }
 
     @Override
