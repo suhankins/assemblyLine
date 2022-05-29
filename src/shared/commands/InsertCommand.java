@@ -48,7 +48,7 @@ public class InsertCommand extends Command {
         if (VehicleCollection.initializationDate == null)
             VehicleCollection.initializationDate = java.time.LocalDate.now();
         IO.print("Added new vehicle with key %d%n", data.getInt("key"));
-        return new JSONObject();
+        return new JSONObject().put("command", "insert");
     }
 
     public void react(JSONObject args) {

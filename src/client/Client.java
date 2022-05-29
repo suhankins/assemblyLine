@@ -94,7 +94,7 @@ public class Client {
                         JSONObject response = new JSONObject(rawResponse);
                         Command.reactCommand(response);
                     } catch(Exception e) {
-                        IO.print(rawResponse);
+                        IO.print(e.getMessage());
                     }
                 }
             } catch(java.util.InputMismatchException e) {
