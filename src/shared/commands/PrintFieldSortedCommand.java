@@ -9,6 +9,8 @@ import assemblyline.VehicleCollection;
 import assemblyline.utils.IO;
 import assemblyline.utils.ErrorMessages;
 
+import org.json.JSONObject;
+
 /**
  * Prints specified field in specified order
  */
@@ -32,8 +34,28 @@ public class PrintFieldSortedCommand extends Command {
         this.ascending = ascending;
     }
 
-    @Override
-    public void execute(String[] args) {
+    private String getCommandName() {
+        String template = "print_field_%s_%s";
+        String ascdes;
+        if (ascending) {
+            ascdes = "ascending";
+        } else {
+            ascdes = "descending";
+        }
+        String fName = fieldName.toLowerCase().replace(" ", "_");
+        return String.format(template, ascdes, fName);
+    }
+
+    public JSONObject request(String[] args) {
+        return new JSONObject().put("command", getCommandName());
+    }
+
+    public JSONObject respond(JSONObject args) {
+        return new JSONObject().put("command", getCommandName()).put("data", VehicleCollection.toJSON());
+    }
+
+    public void react(JSONObject args) {
+        VehicleCollection.fromJSON(args.getJSONObject("data"));
         if (VehicleCollection.vehicleCollection.isEmpty()) {
             IO.print("%s%n", ErrorMessages.COLLECTION_IS_EMPTY);
             return;
@@ -73,7 +95,6 @@ public class PrintFieldSortedCommand extends Command {
         }
     }
 
-    @Override
     public String getHelp() {
         return String.format("Prints fuel types of every vehicle in ascending order.%n%nUsage: print_field_ascending_fuel_type");
     }

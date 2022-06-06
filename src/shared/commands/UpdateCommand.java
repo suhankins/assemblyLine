@@ -30,7 +30,7 @@ public class UpdateCommand extends Command {
     public JSONObject respond(JSONObject args) {
         Vehicle vehicle = VehicleCollection.getById(args.getInt("id"));
         if (vehicle == null) {
-            throw new NullPointerException(String.format("Vehicle with ID %s does not exist.", args.getInt("id")));
+            throw new NullPointerException(String.format("Vehicle with ID %d does not exist.", args.getInt("id")));
         }
 
         vehicle.updateData(args, false);

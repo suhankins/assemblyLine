@@ -217,7 +217,9 @@ public class Vehicle implements Comparable<Vehicle> {
                     IO.print("Fuel type updated%n");
                     break;
                 case "x":
-                    double x = (double)v;
+                    // if value we get CAN be converted to Integer, it will be
+                    // and it's such a pain to deal with so we just do this and hope for the best
+                    double x = listOfParams.getDouble(k);
                     if (ifLower) {
                         if (coordinates.getX() <= x) {
                             break;
@@ -227,7 +229,7 @@ public class Vehicle implements Comparable<Vehicle> {
                     IO.print("X updated%n");
                     break;
                 case "y":
-                    long y = (long)v;
+                    long y = listOfParams.getLong(k);
                     if (ifLower) {
                         if (coordinates.getY() <= y) {
                             break;
