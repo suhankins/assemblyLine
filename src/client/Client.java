@@ -58,8 +58,13 @@ public class Client {
                 //Some command (like exit) don't require any communication with the server
                 if (output != null) {
                     JSONObject response = Comms.sendAndReceive(output.toString());
+                    //probably poorly handled error
                     if (response == null) {
                         continue;
+                    }
+                    //definitively well handled error
+                    if (response.has("error")) {
+                        IO.print("%s%n", response.getString("error"));
                     }
                     Command.reactCommand(response);
                 }

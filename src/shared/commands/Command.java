@@ -56,8 +56,10 @@ public abstract class Command {
         commandList.put("history", new HistoryCommand());
         /*
         commandList.put("replace_if_lower", new ReplaceIfLowerCommand());
+        */
         commandList.put("remove_lower_key", new RemoveLowerKeyCommand());
-
+        
+        /*
         commandList.put("print_field_ascending_fuel_type", new PrintFieldSortedCommand("Fuel type", true));
         commandList.put("print_field_descending_engine_power", new PrintFieldSortedCommand("Engine power", false));
         commandList.put("print_field_descending_number_of_wheels", new PrintFieldSortedCommand("Number of wheels", false));

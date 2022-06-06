@@ -31,22 +31,36 @@ public class Comms {
 
             // Response
             // This is ridicilous
-            // I couldn't easily convert bytebuffer to string, so I did this hell
+            // Because Java is so old i had to create a list of buffers
+            // and then convert it to one buffer
+            // why are you doing this to me, java?
+            List<ByteBuffer> buffers = new ArrayList<ByteBuffer>();
             buffer = ByteBuffer.allocate(2048);
-            int bytesRead = socketChannel.read(buffer);
+            while(socketChannel.read(buffer) > -1) {
+                if (buffer.remaining() == 0) {
+                    buffers.add(buffer);
+                    buffer = ByteBuffer.allocate(2048);
+                }
+            }
+            if (buffer.position() > 0) {
+                buffers.add(buffer);
+            }
 
             socketChannel.close();
 
-            List<Byte> noNulls = new ArrayList<>();
-            for (int i = 0; i < buffer.capacity(); i++) {
-                if (buffer.get(i) == 0) {
-                    break;
+            List<Byte> listOfBytes = new ArrayList<>();
+            for (int i = 0; i < buffers.size(); i++) {
+                for (int j = 0; j < buffers.get(i).capacity(); j++) {
+                    Byte current = buffers.get(i).get(j);
+                    if (current == 0) {
+                        break;
+                    }
+                    listOfBytes.add(current);
                 }
-                noNulls.add(buffer.get(i));
             }
-            bytes = new byte[noNulls.size()];
-            for (int i = 0; i < noNulls.size(); i++) {
-                bytes[i] = noNulls.get(i);
+            bytes = new byte[listOfBytes.size()];
+            for (int i = 0; i < listOfBytes.size(); i++) {
+                bytes[i] = listOfBytes.get(i);
             }
             // React
             String rawResponse = new String(bytes, "UTF-8");
