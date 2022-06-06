@@ -1,1 +1,1 @@
-javac -classpath "json-20211205.jar;." -d . src/shared/*.java src/shared/vehicles/*.java src/shared/utils/*.java src/shared/commands/*.java src/server/*.java src/client/*.java
+javac -classpath "json-20211205.jar;." -d . src/shared/*.java src/shared/vehicles/*.java src/shared/utils/*.java src/shared/commands/*.java src/server/*.java src/client/*.java src/client/utils/*.java

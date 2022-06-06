@@ -6,6 +6,13 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
+import java.net.InetSocketAddress;
+import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.ByteBuffer;
+
+import org.json.JSONObject;
+
 /**
  * Class used for inputting text (and outputting too!)
  */
@@ -25,6 +32,7 @@ public class IO {
 
     /**
      * Outputs text to where ever we need
+     * 
      * @param text
      */
     public static void print(String text) {
@@ -33,6 +41,7 @@ public class IO {
 
     /**
      * Outputs text to where ever we need
+     * 
      * @param text
      * @param args
      */
@@ -42,12 +51,13 @@ public class IO {
 
     /**
      * Get next inputted line
+     * 
      * @return next script line, or next keyboard input
      */
     public static String nextLine() {
         if (!script.isEmpty()) {
             String line = script.remove(0);
-            //If next line in null - remove it, and remove first thing in stack
+            // If next line in null - remove it, and remove first thing in stack
             if (line != null) {
                 IO.print("%s%n", line);
                 return line;
@@ -60,6 +70,7 @@ public class IO {
 
     /**
      * Adds script to the beginning of the current script stack
+     * 
      * @param string script
      */
     public static void addScript(List<String> string, File filename) {
@@ -74,7 +85,7 @@ public class IO {
         }
         stack.push(filename);
         script.addAll(0, string);
-        //Null means that given script has finished execution
+        // Null means that given script has finished execution
         script.add(null);
     }
 }

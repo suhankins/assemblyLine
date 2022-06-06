@@ -23,7 +23,15 @@ public class HelpCommand extends Command {
         //otherwise print the list of commands
             Enumeration keys = commandList.keys();
             while (keys.hasMoreElements()) {
-                IO.print("%s%n", (String)keys.nextElement());
+                String name = (String)keys.nextElement();
+                Command command = commandList.get(name);
+                if (command.hidden) {
+                    continue;
+                }
+                if (!command.allowedOnClient && Command.client) {
+                    continue;
+                }
+                IO.print("%s%n", name);
             }
         }
         return null;

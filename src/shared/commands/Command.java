@@ -12,6 +12,11 @@ import org.json.JSONObject;
  */
 public abstract class Command {
     /**
+     * Is user client or server?
+     * Should be set in main on startup
+     */
+    public static Boolean client;
+    /**
      * List of commands
      */
     private static Hashtable<String, Command> commandList = new Hashtable<String, Command>();
@@ -21,18 +26,26 @@ public abstract class Command {
      */
     public static String[] history = new String[12];
 
+     /**
+     * Some commands should only be accessible to server.
+     * By default we assume that all commands can be used by client too.
+     */
+    public Boolean allowedOnClient = true;
+    /**
+     * Some commands are not meant to be used by people.
+     * By default all commands are assumed to be visible.
+     */
+    public Boolean hidden = false;
+
     //Static initialization block
     static {
+        commandList.put("exists", new ExistsCommand());
         commandList.put("help", new HelpCommand());
-        /*
         commandList.put("info", new InfoCommand());
         commandList.put("show", new ShowCommand());
-        */
         commandList.put("insert", new InsertCommand());
-        /*
         commandList.put("update", new UpdateCommand());
         commandList.put("remove_key", new RemoveKeyCommand());
-        */
         commandList.put("clear", new ClearCommand());
         /*
 
@@ -69,9 +82,15 @@ public abstract class Command {
             throw new CommandDoesNotExistException(name);
         }
 
+        Command command = commandList.get(name);
+
+        if (command.hidden) {
+            throw new CommandDoesNotExistException(name);
+        }
+
         appendHistory(name);
 
-        return commandList.get(name).request(args);
+        return command.request(args);
     }
 
     /**
@@ -85,11 +104,17 @@ public abstract class Command {
     /**
      * Respond to user's command
      * @param args user's request
+     * @param trusted is this a command sent from console or from client?
      * @return result of commands execution
      */
-    public static JSONObject respondCommand(JSONObject args) {
+    public static JSONObject respondCommand(JSONObject args, Boolean trusted) {
+        Command command = commandList.get(args.getString("command"));
+        //If client uses command it's not supposed to use, we just say it doesn't exist
+        if (!trusted & !command.allowedOnClient) {
+            throw new CommandDoesNotExistException(args.getString("command"));
+        }
         appendHistory(args.getString("command"));
-        return commandList.get(args.getString("command")).respond(args);
+        return command.respond(args);
     }
     
     /**

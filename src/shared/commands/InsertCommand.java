@@ -21,16 +21,16 @@ public class InsertCommand extends Command {
 
         IO.print("Creating a new vehicle with the '%d' key:%n", key);
         
-        Hashtable<String, Object> listOfParams = InputArguments.inputArguments(true);
+        JSONObject listOfParams = InputArguments.inputArguments(true);
 
         JSONObject data = new JSONObject().put("key", key);
 
-        Vehicle vehicle = new Vehicle((String)listOfParams.get("name"),
-            new Coordinates((double)listOfParams.get("x"), (long)listOfParams.get("y")),
-            (int)listOfParams.get("enginePower"),
-            (int)listOfParams.get("numberOfWheels"),
-            (VehicleType)listOfParams.get("vehicleType"),
-            (FuelType)listOfParams.get("fuelType"));
+        Vehicle vehicle = new Vehicle(listOfParams.getString("name"),
+            new Coordinates(listOfParams.getDouble("x"), listOfParams.getLong("y")),
+            listOfParams.getInt("enginePower"),
+            listOfParams.getInt("numberOfWheels"),
+            VehicleType.valueOf(listOfParams.getString("vehicleType")),
+            FuelType.valueOf(listOfParams.getString("fuelType")));
         
         data = data.put("vehicle", vehicle.toJSON());
 

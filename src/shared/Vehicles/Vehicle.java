@@ -2,6 +2,7 @@ package assemblyline.vehicles;
 
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.time.LocalDate;
 
 import assemblyline.VehicleCollection;
@@ -175,12 +176,12 @@ public class Vehicle implements Comparable<Vehicle> {
      * Asks for user input to update given vehicle's fields.
      * @param ifLower only update fields if given value is lower
      */
-    public void updateData(Hashtable<String, Object> listOfParams, boolean ifLower) {
-        Enumeration keys = listOfParams.keys();
+    public void updateData(JSONObject listOfParams, boolean ifLower) {
+        Iterator<String> keys = listOfParams.keys();
 
         //I really should consider finding a better way to do this...
-        while (keys.hasMoreElements()) {
-            String k = (String)keys.nextElement();
+        while (keys.hasNext()) {
+            String k = (String)keys.next();
             Object v = listOfParams.get(k);
             switch(k) {
                 case "name":
@@ -302,6 +303,9 @@ public class Vehicle implements Comparable<Vehicle> {
             FuelType.valueOf(json.getString("fuelType"))
         );
         if (trusted) {
+            //Creating new vehicle always increases counter, but because we have an id already
+            //we actually shouldn't increases, but i suck at coding so this will do
+            counter--;
             Integer id = json.getInt("id");
             //If given ID already exists, we throw an error
             if (VehicleCollection.getById(id) != null) {
@@ -320,7 +324,6 @@ public class Vehicle implements Comparable<Vehicle> {
 
     @Override
     public String toString() {
-
         return String.format("%s - %s #%d%nFuel type: %s%nLocation: %s%nEngine Power: %d%nNumber of wheels: %d%nCreation date: %s",
             this.name, this.type, this.id, this.fuelType, this.coordinates.toString(), this.enginePower, this.numberOfWheels, this.creationDate.toString());
     }

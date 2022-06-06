@@ -32,6 +32,7 @@ public class Server {
 
     public static void main(String[] args) {
         // =============== Initialization ===============
+        Command.client = false;
         JSONObject userInput;
         // =============== Save file loading routine ===============
         try {
@@ -69,7 +70,7 @@ public class Server {
                 IO.print("User requested command %s%n", userInput.getString("command"));
                 try {
                     JSONObject output;
-                    output = Command.respondCommand(userInput);
+                    output = Command.respondCommand(userInput, false);
                     if (output != null) {
                         BufferedWriter writer = new BufferedWriter(
                                 new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));

@@ -4,6 +4,8 @@ import java.util.Hashtable;
 
 import assemblyline.vehicles.*;
 
+import org.json.JSONObject;
+
 public class InputArguments {
         /**
      * Asks user to input all the required arguments for creating a new instance of a vehicle class.
@@ -11,8 +13,8 @@ public class InputArguments {
      * @param skip should name, vehicle type and fuel type be skipped?
      * @return a hashlist where key is a name of the variable and value is a corresponding object
      */
-    public static Hashtable<String, Object> inputArguments(boolean isRequired, boolean skip) {
-        Hashtable<String, Object> toReturn = new Hashtable<String, Object>();
+    public static JSONObject inputArguments(boolean isRequired, boolean skip) {
+        JSONObject toReturn = new JSONObject();
         boolean correct = skip;
         String raw;
 
@@ -143,7 +145,7 @@ public class InputArguments {
             if (shouldCheck(isRequired, raw)) {
                 try {
                     VehicleType vehicleType = VehicleType.valueOf(raw.toUpperCase().trim());
-                    toReturn.put("vehicleType", vehicleType);
+                    toReturn.put("vehicleType", raw.toUpperCase().trim());
                     //There's actually no reason to check if VehicleType is correct, because
                     //valueOf can't return null
                     correct = true;
@@ -170,7 +172,7 @@ public class InputArguments {
             if (shouldCheck(isRequired, raw)) {
                 try {
                     FuelType fuelType = FuelType.valueOf(raw.toUpperCase().trim());
-                    toReturn.put("fuelType", fuelType);
+                    toReturn.put("fuelType", raw.toUpperCase().trim());
                     correct = true;
                     //There's actually no reason to check if VehicleType is correct, because
                     //valueOf can't return null
@@ -191,7 +193,7 @@ public class InputArguments {
      * @param isRequired is it required that all parameters are inputted?
      * @return a hashlist where key is a name of the variable and value is a corresponding object
      */
-    public static Hashtable<String, Object> inputArguments(boolean isRequired) {
+    public static JSONObject inputArguments(boolean isRequired) {
         return inputArguments(isRequired, false);
     }
 

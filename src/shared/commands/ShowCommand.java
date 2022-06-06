@@ -30,14 +30,13 @@ public class ShowCommand extends Command {
     public void react(JSONObject args) {
         JSONObject data = args.getJSONObject("data");
         JSONArray names = data.names();
-        //String.format("[%d] %s%n%n", k, VehicleCollection.vehicleCollection.get(k).toString())
         if (names == null) {
             IO.print("List is empty%n");
         } else {
             IO.print("List of vehicles:%n");
             for (int i = 0; i < names.length(); i++) {
                 String k = names.getString(i);
-                Vehicle vehicle = Vehicle.fromJSON(data.getJSONObject(k), false);
+                Vehicle vehicle = Vehicle.fromJSON(data.getJSONObject(k), true);
                 IO.print("[%s] %s%n%n", k, vehicle.toString());
             }
         }
