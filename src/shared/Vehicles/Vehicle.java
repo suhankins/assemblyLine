@@ -301,7 +301,7 @@ public class Vehicle implements Comparable<Vehicle> {
     /**
      * Vehicle factory
      * @param json json object you want to use to create a vehicle object
-     * @param trusted if set to false, id and and creation date fields will be ignored
+     * @param trusted if set to false, id and creation date fields will be ignored
      * @return new vehicle object
      */
     public static Vehicle fromJSON(JSONObject json, boolean trusted, boolean notForStorage) {
@@ -316,7 +316,7 @@ public class Vehicle implements Comparable<Vehicle> {
         );
         if (trusted) {
             //Creating new vehicle always increases counter, but because we have an id already
-            //we actually shouldn't increases, but i suck at coding so this will do
+            //we actually shouldn't increase, but I suck at coding so this will do
             counter--;
             Integer id = json.getInt("id");
             //If given ID already exists, we throw an error

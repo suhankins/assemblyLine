@@ -30,8 +30,8 @@ public class Comms {
             }
 
             // Response
-            // This is ridicilous
-            // Because Java is so old i had to create a list of buffers
+            // This is ridiculous
+            // Because Java is so old I had to create a list of buffers
             // and then convert it to one buffer
             // why are you doing this to me, java?
             List<ByteBuffer> buffers = new ArrayList<ByteBuffer>();

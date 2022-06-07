@@ -28,12 +28,12 @@ public abstract class Command {
 
      /**
      * Some commands should only be accessible to server.
-     * By default we assume that all commands can be used by client too.
+     * By default, we assume that all commands can be used by client too.
      */
     public Boolean allowedOnClient = true;
     /**
      * Some commands are not meant to be used by people.
-     * By default all commands are assumed to be visible.
+     * By default, all commands are assumed to be visible.
      */
     public Boolean hidden = false;
 

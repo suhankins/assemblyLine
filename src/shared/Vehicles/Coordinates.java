@@ -80,7 +80,7 @@ public class Coordinates {
     }
 
     /**
-     * Converts coodinates to JSON object
+     * Converts coordinates to JSON object
      * @return JSON Object
      */
     public JSONObject toJSON()

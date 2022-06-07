@@ -5,10 +5,7 @@ import java.util.Hashtable;
 
 import assemblyline.vehicles.Vehicle;
 import assemblyline.VehicleCollection;
-import assemblyline.utils.CommandDoesNotExistException;
-import assemblyline.utils.IO;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ExistsCommand extends Command {

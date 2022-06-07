@@ -17,7 +17,6 @@ public class SaveCommand extends Command {
         return null;
     }
     public void react(JSONObject args) {
-        return;
     }
 
     public String getHelp() {

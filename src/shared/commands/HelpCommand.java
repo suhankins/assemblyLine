@@ -20,7 +20,7 @@ public class HelpCommand extends Command {
 
             IO.print(commandList.get(data).getHelp());
         } else {
-        //otherwise print the list of commands
+        //otherwise, print the list of commands
             Enumeration keys = commandList.keys();
             while (keys.hasMoreElements()) {
                 String name = (String)keys.nextElement();
@@ -49,7 +49,7 @@ public class HelpCommand extends Command {
 
             list.put(commandList.get(data).getHelp());
         } else {
-        //otherwise print the list of commands
+        //otherwise, print the list of commands
             Enumeration keys = commandList.keys();
             while (keys.hasMoreElements()) {
                 list.put(keys.nextElement());

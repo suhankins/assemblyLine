@@ -12,8 +12,6 @@ import java.util.List;
 import assemblyline.client.utils.Comms;
 import assemblyline.commands.Command;
 import assemblyline.utils.ErrorMessages;
-import assemblyline.utils.FeatureNotImplementedException;
-import assemblyline.utils.FileManager;
 import assemblyline.utils.IO;
 
 import org.json.JSONObject;
@@ -33,7 +31,7 @@ public class Client {
         //=============== Initial message ===============
         IO.print("Assemblyline v2.0 CLIENT%nUse 'help' command to see list of commands.%n%n");
         try {
-            Comms.serverAddress = new InetSocketAddress("localhost", 80);
+            Comms.serverAddress = new InetSocketAddress("localhost", 8925);
         } catch(Exception e) {
             IO.print(e.getMessage());
             //if we can't connect to the server we might as well just give up 

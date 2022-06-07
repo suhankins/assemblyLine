@@ -11,8 +11,6 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.ByteBuffer;
 
-import org.json.JSONObject;
-
 /**
  * Class used for inputting text (and outputting too!)
  */

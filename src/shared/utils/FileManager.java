@@ -10,14 +10,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Scanner;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import assemblyline.VehicleCollection;
-import assemblyline.vehicles.Coordinates;
-import assemblyline.vehicles.FuelType;
-import assemblyline.vehicles.VehicleType;
-import assemblyline.vehicles.Vehicle;
 
 /**
  * Class used for all things file management

@@ -1,6 +1,7 @@
 package assemblyline.server.utils;
 
 import java.util.Arrays;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.BufferedReader;
@@ -12,23 +13,21 @@ import java.nio.charset.StandardCharsets;
 
 import assemblyline.commands.Command;
 import assemblyline.utils.ErrorMessages;
-import assemblyline.utils.FeatureNotImplementedException;
-import assemblyline.utils.FileManager;
 import assemblyline.utils.IO;
 
 import org.json.JSONObject;
 
-public class Comms extends Thread { 
-    /**
-     * Port on which server should be initilialized.
-     */
-    private static int port = 80;
+public class Comms extends Thread {
 
     public void run() {
         JSONObject userInput;
         // =============== Starting up the server ===============
         ServerSocket serverSocket;
         try {
+            /**
+             * Port on which server should be initilialized.
+             */
+            int port = 8925;
             serverSocket = new ServerSocket(port);
         } catch (Exception exception) {
             IO.print(ErrorMessages.TEMPLATE, exception.getMessage());
@@ -36,8 +35,11 @@ public class Comms extends Thread {
         }
 
         // =============== Initial message ===============
-        IO.print("Assemblyline v2.0 SERVER%nListening to port %d%n%n", serverSocket.getLocalPort());
-
+        try {
+            IO.print("Assemblyline v2.0 SERVER%nListening to port %d%n%s%n%n", serverSocket.getLocalPort(), InetAddress.getLocalHost().toString());
+        } catch(Exception e) {
+            return;
+        }
         // =============== Handling user input ===============
         while (true) {
             try {
@@ -57,7 +59,7 @@ public class Comms extends Thread {
                         writer.append(output.toString());
 
                         writer.close();
-                        IO.print("Reponded to user%n");
+                        IO.print("Responded to user%n");
                     }
                 } catch (Exception e) {
                     BufferedWriter writer = new BufferedWriter(

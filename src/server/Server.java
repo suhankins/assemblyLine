@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 import assemblyline.server.utils.Comms;
 import assemblyline.commands.Command;
 import assemblyline.utils.ErrorMessages;
-import assemblyline.utils.FeatureNotImplementedException;
 import assemblyline.utils.FileManager;
 import assemblyline.utils.IO;
 

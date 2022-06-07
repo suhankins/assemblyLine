@@ -27,7 +27,6 @@ public class HistoryCommand extends Command {
     }
 
     public void react(JSONObject args) {
-        return;
     }
 
     public String getHelp() {
