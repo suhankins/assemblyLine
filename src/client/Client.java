@@ -42,7 +42,7 @@ public class Client {
         IO.print("Server: %s:%d%n", Comms.serverAddress.getHostString(), Comms.serverAddress.getPort());
         //=============== Handling user input ===============
         while (true) {
-            System.out.print("> ");
+            IO.print("> ");
             userInput = IO.nextLine().split(" ");
 
             //All commands are lower case, and I don't want people to suffer from not knowing it

@@ -1,0 +1,1 @@
+jar cfm Server.jar src/server/MANIFEST.MF assemblyline json-20211205.jar

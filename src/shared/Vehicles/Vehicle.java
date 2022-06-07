@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 import assemblyline.VehicleCollection;
 import assemblyline.utils.ValueOutOfRangeException;
+import netscape.javascript.JSObject;
 import assemblyline.utils.NotEmptyException;
 import assemblyline.utils.NotNullException;
 import assemblyline.utils.IO;
@@ -252,15 +253,17 @@ public class Vehicle implements Comparable<Vehicle> {
      * @param fuelType <p>* Cannot be null</p>
      */
     public Vehicle(String name, Coordinates coordinates, int enginePower,
-            int numberOfWheels, VehicleType vehicleType, FuelType fuelType) {
+            int numberOfWheels, VehicleType vehicleType, FuelType fuelType, boolean notForStorage) {
         if (!isNameCorrect(name)) throw new NotEmptyException("Name");
         if (!isCoordinatesCorrect(coordinates)) throw new NotNullException("Coordinates");
         if (!isEnginePowerCorrect(enginePower)) throw new ValueOutOfRangeException(1, false, "Engine Power");
         if (!isNumberOfWheelsCorrect(numberOfWheels)) throw new ValueOutOfRangeException(1, false, "Number of wheels");
         if (!isVehicleTypeCorrect(vehicleType)) throw new NotNullException("Vehicle type");
         if (!isFuelTypeCorrect(fuelType)) throw new NotNullException("Fuel type");
-
-        counter += 1;
+        
+        if (!notForStorage) {
+            counter += 1;
+        }
 
         this.id = counter;
         this.name = name;
@@ -270,6 +273,12 @@ public class Vehicle implements Comparable<Vehicle> {
         this.numberOfWheels = numberOfWheels;
         this.type = vehicleType;
         this.fuelType = fuelType;
+    }
+
+    public Vehicle(String name, Coordinates coordinates, int enginePower,
+    int numberOfWheels, VehicleType vehicleType, FuelType fuelType) {
+        this(name, coordinates, enginePower,
+        numberOfWheels, vehicleType, fuelType, false);
     }
 
     /**
@@ -295,14 +304,15 @@ public class Vehicle implements Comparable<Vehicle> {
      * @param trusted if set to false, id and and creation date fields will be ignored
      * @return new vehicle object
      */
-    public static Vehicle fromJSON(JSONObject json, boolean trusted) {
+    public static Vehicle fromJSON(JSONObject json, boolean trusted, boolean notForStorage) {
         Vehicle vehicle = new Vehicle(
             json.getString("name"),
             Coordinates.fromJSON(json.getJSONObject("coordinates")),
             json.getInt("enginePower"),
             json.getInt("numberOfWheels"),
             VehicleType.valueOf(json.getString("vehicleType")),
-            FuelType.valueOf(json.getString("fuelType"))
+            FuelType.valueOf(json.getString("fuelType")),
+            notForStorage
         );
         if (trusted) {
             //Creating new vehicle always increases counter, but because we have an id already
@@ -310,13 +320,17 @@ public class Vehicle implements Comparable<Vehicle> {
             counter--;
             Integer id = json.getInt("id");
             //If given ID already exists, we throw an error
-            if (VehicleCollection.getById(id) != null) {
+            if (VehicleCollection.getById(id) != null && !notForStorage) {
                 throw new ValueOutOfRangeException();
             }
             vehicle.setId(id);
             vehicle.setCreationDate(LocalDate.parse(json.getString("creationDate")));
         }
         return vehicle;
+    }
+
+    public static Vehicle fromJSON(JSONObject json, boolean trusted) {
+        return fromJSON(json, trusted, false);
     }
 
     @Override

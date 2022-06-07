@@ -17,8 +17,13 @@ public class UpdateCommand extends Command {
     public JSONObject request(String[] args) {
         isArgumentGiven(args);
         int id = Integer.parseInt(args[0]);
-        Boolean exists = Comms.sendAndReceive(new JSONObject().put("command", "exists").put("id", id).toString()).getBoolean("data");
-        
+        Boolean exists;
+        if (Command.client) {
+            exists = Comms.sendAndReceive(new JSONObject().put("command", "exists").put("id", id).toString()).getBoolean("data");
+        } else {
+            exists = VehicleCollection.getById(id) != null;
+        }
+
         if (!exists) {
             throw new NullPointerException(String.format("Vehicle with ID %s does not exist.", args[0]));
         }

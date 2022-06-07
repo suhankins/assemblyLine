@@ -15,7 +15,12 @@ public class ReplaceIfLowerCommand extends Command {
         isArgumentGiven(args);
 
         int key = Integer.parseInt(args[0]);
-        Boolean exists = Comms.sendAndReceive(new JSONObject().put("command", "exists_key").put("key", key).toString()).getBoolean("data");
+        Boolean exists;
+        if (Command.client) {
+            exists = Comms.sendAndReceive(new JSONObject().put("command", "exists_key").put("key", key).toString()).getBoolean("data");
+        } else {
+            exists = VehicleCollection.vehicleCollection.containsKey(key);
+        }
         
         if (!exists) {
             throw new NullPointerException(String.format("Vehicle with key %s does not exist.", args[0]));

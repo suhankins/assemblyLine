@@ -36,7 +36,7 @@ public class ShowCommand extends Command {
             IO.print("List of vehicles:%n");
             for (int i = 0; i < names.length(); i++) {
                 String k = names.getString(i);
-                Vehicle vehicle = Vehicle.fromJSON(data.getJSONObject(k), true);
+                Vehicle vehicle = Vehicle.fromJSON(data.getJSONObject(k), true, true);
                 IO.print("[%s] %s%n%n", k, vehicle.toString());
             }
         }

@@ -2,15 +2,24 @@ package assemblyline.commands;
 
 import assemblyline.utils.FileManager;
 
+import org.json.JSONObject;
+
 public class SaveCommand extends Command {
-    @Override
-    public void execute(String[] args) {
+    {
+        allowedOnClient = false;
+    }
+    public JSONObject request(String[] args) {
         isArgumentGiven(args);
-        
-        FileManager.saveCollection(args[0]);
+        return new JSONObject().put("command", "save").put("data", args[0]);
+    }
+    public JSONObject respond(JSONObject args) {
+        FileManager.saveCollection(args.getString("data"));
+        return null;
+    }
+    public void react(JSONObject args) {
+        return;
     }
 
-    @Override
     public String getHelp() {
         return String.format("Saves vehicle collection to a specified JSON file.%n%nUsage: save [file path]");
     }

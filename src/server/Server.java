@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
+import assemblyline.server.utils.Comms;
 import assemblyline.commands.Command;
 import assemblyline.utils.ErrorMessages;
 import assemblyline.utils.FeatureNotImplementedException;
@@ -25,15 +26,10 @@ import org.json.JSONObject;
  * @since 2022-02-14
  */
 public class Server {
-    /**
-     * Port on which server should be initilialized.
-     */
-    private static int port = 80;
-
     public static void main(String[] args) {
         // =============== Initialization ===============
         Command.client = false;
-        JSONObject userInput;
+        String[] userInput;
         // =============== Save file loading routine ===============
         try {
             if (args.length > 0) {
@@ -47,57 +43,29 @@ public class Server {
             VehicleCollection.initializationDate = null;
         }
 
-        // =============== Starting up the server ===============
-        ServerSocket serverSocket;
-        try {
-            serverSocket = new ServerSocket(port);
-        } catch (Exception exception) {
-            IO.print(ErrorMessages.TEMPLATE, exception.getMessage());
-            return;
-        }
+        Comms p = new Comms();
+        p.start();
 
-        // =============== Initial message ===============
-        IO.print("Assemblyline v2.0 SERVER%nListening to port %d%n%n", serverSocket.getLocalPort());
-
-        // =============== Handling user input ===============
         while (true) {
+            userInput = IO.nextLine().split(" ");
+
+            userInput[0] = userInput[0].toLowerCase();
+
             try {
-                Socket socket = serverSocket.accept();
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(
-                                socket.getInputStream()));
-                userInput = new JSONObject(reader.readLine());
-                IO.print("User requested command %s%n", userInput.getString("command"));
-                try {
-                    JSONObject output;
-                    output = Command.respondCommand(userInput, false);
-                    if (output != null) {
-                        BufferedWriter writer = new BufferedWriter(
-                                new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-
-                        writer.append(output.toString());
-
-                        writer.close();
-                        IO.print("Reponded to user%n");
-                    }
-                } catch (Exception e) {
-                    BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-
-                    String errorText;
-
-                    if (e.getMessage() == null) {
-                        errorText = String.format(ErrorMessages.TEMPLATE, e.getClass());
-                    } else {
-                        errorText = String.format(ErrorMessages.TEMPLATE, e.getMessage());
-                    }
-
-                    writer.append(errorText);
-
-                    writer.close();
-                    IO.print(errorText);
+                JSONObject output = null;
+                if (userInput.length > 1) {
+                    output = Command.requestCommand(userInput[0], Arrays.copyOfRange(userInput, 1, userInput.length));
+                } else {
+                    output = Command.requestCommand(userInput[0]);
                 }
-            } catch (Exception e) {
+                if (output != null) {
+                    output = Command.respondCommand(output, true);
+                    if (output != null) {
+                        Command.reactCommand(output);
+                    }
+                }
+            } catch(Exception e) {
+                //Apparently that can happen /shrug
                 if (e.getMessage() == null) {
                     IO.print(ErrorMessages.TEMPLATE, e.getClass());
                 } else {

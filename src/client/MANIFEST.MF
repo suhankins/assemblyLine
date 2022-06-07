@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: assemblyline.Client
+Class-Path: json-20211205.jar

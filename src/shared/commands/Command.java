@@ -49,10 +49,8 @@ public abstract class Command {
         commandList.put("update", new UpdateCommand());
         commandList.put("remove_key", new RemoveKeyCommand());
         commandList.put("clear", new ClearCommand());
-        /*
 
         commandList.put("save", new SaveCommand());
-        */
         commandList.put("execute_script", new ExecuteScriptCommand());
         commandList.put("exit", new ExitCommand());
         commandList.put("history", new HistoryCommand());
