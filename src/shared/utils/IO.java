@@ -6,11 +6,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
-import java.net.InetSocketAddress;
-import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
-import java.nio.ByteBuffer;
-
 /**
  * Class used for inputting text (and outputting too!)
  */

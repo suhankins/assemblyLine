@@ -1,0 +1,1 @@
+jar cfm Client.jar src/client/MANIFEST.MF assemblyline json-20211205.jar

@@ -1,13 +1,10 @@
 package assemblyline.vehicles;
 
-import java.util.Hashtable;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.time.LocalDate;
 
 import assemblyline.VehicleCollection;
 import assemblyline.utils.ValueOutOfRangeException;
-import netscape.javascript.JSObject;
 import assemblyline.utils.NotEmptyException;
 import assemblyline.utils.NotNullException;
 import assemblyline.utils.IO;

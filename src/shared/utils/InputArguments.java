@@ -1,7 +1,5 @@
 package assemblyline.utils;
 
-import java.util.Hashtable;
-
 import assemblyline.vehicles.*;
 
 import org.json.JSONObject;

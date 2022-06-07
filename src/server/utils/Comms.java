@@ -1,15 +1,12 @@
 package assemblyline.server.utils;
 
-import java.util.Arrays;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 
 import assemblyline.commands.Command;
 import assemblyline.utils.ErrorMessages;

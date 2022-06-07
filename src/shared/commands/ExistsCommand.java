@@ -1,8 +1,5 @@
 package assemblyline.commands;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-
 import assemblyline.vehicles.Vehicle;
 import assemblyline.VehicleCollection;
 

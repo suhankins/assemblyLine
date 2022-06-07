@@ -1,7 +1,5 @@
 package assemblyline.commands;
 
-import java.util.Hashtable;
-
 import assemblyline.vehicles.*;
 import assemblyline.VehicleCollection;
 
