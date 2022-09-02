@@ -9,15 +9,13 @@ import org.json.JSONObject;
 public class ClearCommand extends Command {
     public JSONObject request(String[] args) {
         IO.print("Asking server to clear the collection...%n");
-        JSONObject output = new JSONObject().put("command", "clear");
-        return output;
+        return new JSONObject().put("command", "clear");
     }
 
     public JSONObject respond(JSONObject args) {
         VehicleCollection.vehicleCollection.clear();
         IO.print("Collection cleared.%n");
-        JSONObject output = new JSONObject().put("command", "clear");
-        return output;
+        return new JSONObject().put("command", "clear");
     }
 
     public void react(JSONObject args) {

@@ -63,7 +63,7 @@ public class Comms {
                 bytes[i] = listOfBytes.get(i);
             }
             // React
-            String rawResponse = new String(bytes, "UTF-8");
+            String rawResponse = new String(bytes, StandardCharsets.UTF_8);
             JSONObject response;
             try {
                 response = new JSONObject(rawResponse);

@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 import assemblyline.commands.Command;
 import assemblyline.utils.ErrorMessages;
@@ -51,7 +52,7 @@ public class Comms extends Thread {
                     output = Command.respondCommand(userInput, false);
                     if (output != null) {
                         BufferedWriter writer = new BufferedWriter(
-                                new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+                                new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
 
                         writer.append(output.toString());
 
@@ -60,7 +61,7 @@ public class Comms extends Thread {
                     }
                 } catch (Exception e) {
                     BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+                        new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
 
                     String errorText;
 
