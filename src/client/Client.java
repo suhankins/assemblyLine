@@ -25,7 +25,11 @@ public class Client {
         //=============== Initial message ===============
         IO.print("Assemblyline v2.0 CLIENT%nUse 'help' command to see list of commands.%n%n");
         try {
-            Comms.serverAddress = new InetSocketAddress("localhost", 8925);
+            if (args.length == 0) {
+                Comms.serverAddress = new InetSocketAddress("localhost", 5400);
+            } else {
+                Comms.serverAddress = new InetSocketAddress(args[0], 5400);
+            }
         } catch(Exception e) {
             IO.print(e.getMessage());
             //if we can't connect to the server we might as well just give up 

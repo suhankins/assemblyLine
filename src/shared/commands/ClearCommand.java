@@ -12,7 +12,7 @@ public class ClearCommand extends Command {
         return new JSONObject().put("command", "clear");
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         VehicleCollection.vehicleCollection.clear();
         IO.print("Collection cleared.%n");
         return new JSONObject().put("command", "clear");

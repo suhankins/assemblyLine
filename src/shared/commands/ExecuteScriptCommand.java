@@ -15,7 +15,7 @@ public class ExecuteScriptCommand extends Command {
         return null;
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         return null;
     }
 

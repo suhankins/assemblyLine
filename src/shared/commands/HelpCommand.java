@@ -37,7 +37,7 @@ public class HelpCommand extends Command {
         return null;
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         Hashtable<String, Command> commandList = Command.getCommandList();
         JSONArray list = new JSONArray();
         //if we were asked about a specific command, reply with its description

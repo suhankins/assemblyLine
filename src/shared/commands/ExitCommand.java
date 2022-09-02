@@ -8,7 +8,7 @@ public class ExitCommand extends Command {
         return null;
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         //System.exit(0);
         return null;
     }

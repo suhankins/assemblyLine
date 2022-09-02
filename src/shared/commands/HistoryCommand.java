@@ -17,7 +17,7 @@ public class HistoryCommand extends Command {
         return null;
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         for (int i = 11; i >= 0; i--) {
             if (history[i] != null) {
                 IO.print("%s%n", history[i]);

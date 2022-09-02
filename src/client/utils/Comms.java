@@ -8,6 +8,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.ByteBuffer;
 
+import assemblyline.utils.ErrorMessages;
 import assemblyline.utils.IO;
 
 import org.json.JSONObject;
@@ -31,7 +32,7 @@ public class Comms {
 
             // Response
             // This is ridiculous
-            // Because Java is so old I had to create a list of buffers
+            // Because Java is so old, I had to create a list of buffers
             // and then convert it to one buffer
             // why are you doing this to me, java?
             List<ByteBuffer> buffers = new ArrayList<ByteBuffer>();
@@ -73,7 +74,7 @@ public class Comms {
             }
             return null;
         } catch (Exception e) {
-            IO.print(e.getMessage());
+            IO.print(ErrorMessages.TEMPLATE, e.getMessage());
         }
         return null;
     }

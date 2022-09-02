@@ -39,9 +39,13 @@ public class InsertCommand extends Command {
     }
 
     public JSONObject respond(JSONObject args) {
+        return respond(args, false);
+    }
+
+    public JSONObject respond(JSONObject args, boolean trusted) {
         JSONObject data = args.getJSONObject("data");
         VehicleCollection.vehicleCollection.put(data.getInt("key"),
-        Vehicle.fromJSON(data.getJSONObject("vehicle"), !Command.client));
+                Vehicle.fromJSON(data.getJSONObject("vehicle"), trusted));
         //Setting initialization data since this is probably the first car in collection
         if (VehicleCollection.initializationDate == null)
             VehicleCollection.initializationDate = java.time.LocalDate.now();

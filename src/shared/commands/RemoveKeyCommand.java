@@ -13,7 +13,7 @@ public class RemoveKeyCommand extends Command {
         return new JSONObject().put("command", "remove_key").put("data", args[0]);
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         int key = args.getInt("data");
 
         if (!VehicleCollection.vehicleCollection.containsKey(key)) {

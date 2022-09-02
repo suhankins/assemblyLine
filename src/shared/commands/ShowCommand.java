@@ -17,7 +17,7 @@ public class ShowCommand extends Command {
         return new JSONObject().put("command", "show");
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         Enumeration keys = VehicleCollection.vehicleCollection.keys();
         JSONObject data = new JSONObject();
         while (keys.hasMoreElements()) {

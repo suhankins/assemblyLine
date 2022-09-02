@@ -15,7 +15,7 @@ public class InfoCommand extends Command {
         return new JSONObject().put("command", "info");
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         if (VehicleCollection.isEmpty()) {
             return new JSONObject().put("command", "info");
         } else {

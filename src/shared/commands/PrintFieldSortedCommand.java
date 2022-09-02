@@ -50,7 +50,7 @@ public class PrintFieldSortedCommand extends Command {
         return new JSONObject().put("command", getCommandName());
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         return new JSONObject().put("command", getCommandName()).put("data", VehicleCollection.toJSON());
     }
 

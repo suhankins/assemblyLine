@@ -31,7 +31,7 @@ public class ReplaceIfLowerCommand extends Command {
         return jsonRequest;
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         Vehicle vehicle = VehicleCollection.vehicleCollection.get(args.getInt("key"));
         if (vehicle == null) {
             throw new NullPointerException(String.format("Vehicle with key %d does not exist.", args.getInt("key")));

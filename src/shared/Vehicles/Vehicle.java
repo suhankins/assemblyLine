@@ -184,7 +184,7 @@ public class Vehicle implements Comparable<Vehicle> {
             switch(k) {
                 case "name":
                     this.setName((String)v);
-                    IO.print("Name updated%n");
+                    IO.print("Name of vehicle #%d updated%n", getId());
                     break;
                 case "enginePower":
                     int enginePower = (int)v;
@@ -194,7 +194,7 @@ public class Vehicle implements Comparable<Vehicle> {
                         }
                     }
                     this.setEnginePower(enginePower);
-                    IO.print("Engine power updated%n");
+                    IO.print("Engine power of vehicle #%d updated%n", getId());
                     break;
                 case "numberOfWheels":
                     int numberOfWheels = (int)v;
@@ -204,15 +204,15 @@ public class Vehicle implements Comparable<Vehicle> {
                         }
                     }
                     this.setNumberOfWheels(numberOfWheels);
-                    IO.print("Number of wheels updated%n");
+                    IO.print("Number of wheels of vehicle #%d updated%n", getId());
                     break;
                 case "vehicleType":
-                    this.setVehicleType((VehicleType)v);
-                    IO.print("Vehicle type updated%n");
+                    this.setVehicleType(VehicleType.valueOf((String)v));
+                    IO.print("Vehicle type of vehicle #%d updated%n", getId());
                     break;
                 case "fuelType":
-                    this.setFuelType((FuelType)v);
-                    IO.print("Fuel type updated%n");
+                    this.setFuelType(FuelType.valueOf((String)v));
+                    IO.print("Fuel type of vehicle #%d updated%n", getId());
                     break;
                 case "x":
                     // if value we get CAN be converted to Integer, it will be

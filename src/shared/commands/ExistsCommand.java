@@ -15,7 +15,7 @@ public class ExistsCommand extends Command {
         return null;
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         Vehicle vehicle = VehicleCollection.getById(args.getInt("id"));
         Boolean exists = (vehicle != null);
         return new JSONObject().put("data", exists).put("command", "exists");

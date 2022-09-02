@@ -16,7 +16,7 @@ public class RemoveLowerKeyCommand extends Command {
         return new JSONObject().put("command", "remove_lower_key").put("data", args[0]);
     }
     
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         if (VehicleCollection.isEmpty()) {
             IO.print("%s%n", ErrorMessages.COLLECTION_IS_EMPTY);
             return new JSONObject().put("error", ErrorMessages.COLLECTION_IS_EMPTY);

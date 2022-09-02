@@ -25,7 +25,7 @@ public class Comms extends Thread {
             /**
              * Port on which server should be initilialized.
              */
-            int port = 8925;
+            int port = 5400;
             serverSocket = new ServerSocket(port);
         } catch (Exception exception) {
             IO.print(ErrorMessages.TEMPLATE, exception.getMessage());

@@ -14,7 +14,7 @@ public class ExistsKeyCommand extends Command {
         return null;
     }
 
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         Boolean exists = VehicleCollection.vehicleCollection.containsKey(args.getInt("key"));
         return new JSONObject().put("data", exists).put("command", "exists_key");
     }

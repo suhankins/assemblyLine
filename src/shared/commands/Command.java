@@ -112,7 +112,7 @@ public abstract class Command {
             throw new CommandDoesNotExistException(args.getString("command"));
         }
         appendHistory(args.getString("command"));
-        return command.respond(args);
+        return command.respond(args, trusted);
     }
     
     /**
@@ -164,8 +164,9 @@ public abstract class Command {
     /**
      * Execute the command on server side
      * @param args JSONObject with arguments
+     * @param trusted was command sent from console or server?
      */
-    public abstract JSONObject respond(JSONObject args);
+    public abstract JSONObject respond(JSONObject args, boolean trusted);
 
     /**
      * Handle server's response on client side

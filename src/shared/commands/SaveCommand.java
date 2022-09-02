@@ -12,7 +12,7 @@ public class SaveCommand extends Command {
         isArgumentGiven(args);
         return new JSONObject().put("command", "save").put("data", args[0]);
     }
-    public JSONObject respond(JSONObject args) {
+    public JSONObject respond(JSONObject args, boolean trusted) {
         FileManager.saveCollection(args.getString("data"));
         return null;
     }
