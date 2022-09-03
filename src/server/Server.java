@@ -24,7 +24,19 @@ public class Server {
         // =============== Save file loading routine ===============
         try {
             if (args.length > 0) {
-                FileManager.loadSave(args[0]);
+                boolean nextIsPort = false;
+                for (int i = 0; i < args.length; i++) {
+                    if (args[i] == "-p") {
+                        nextIsPort = true;
+                        continue;
+                    }
+                    if (nextIsPort) {
+                        Comms.port = Integer.parseInt(args[i]);
+                        nextIsPort = false;
+                    } else {
+                        FileManager.loadSave(args[i]);
+                    }
+                }
             }
         } catch (Exception exception) {
             IO.print(ErrorMessages.TEMPLATE, exception.getMessage());

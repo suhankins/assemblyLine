@@ -16,16 +16,16 @@ import assemblyline.utils.IO;
 import org.json.JSONObject;
 
 public class Comms extends Thread {
+    /**
+     * Port for which server will listen
+     */
+    public static int port = 5400;
 
     public void run() {
         JSONObject userInput;
         // =============== Starting up the server ===============
         ServerSocket serverSocket;
         try {
-            /**
-             * Port on which server should be initilialized.
-             */
-            int port = 5400;
             serverSocket = new ServerSocket(port);
         } catch (Exception exception) {
             IO.print(ErrorMessages.TEMPLATE, exception.getMessage());
