@@ -29,3 +29,5 @@ tmp.*
 *.tmp
 Server.jar
 .idea/workspace.xml
+
+.idea/*
