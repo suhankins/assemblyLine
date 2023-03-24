@@ -13,6 +13,21 @@ Code can be a little bit messy, so sorry about that.
 
 Run **runclient.bat** or **runserver.bat** depending on which one you need.
 
+### Server parameters
+
+* -p \[number]: Port
+* \[fileName]: Load save file
+
+Without parameters listens to localhost:5400
+
+### Client parameters
+
+1. \[hostname]: Hostname
+2. \[port]: Port
+Only in this order!
+
+Without parameters connects to localhost:5400
+
 ## How to assemble .jar file?
 
 Run either jarclient.bat or jarserver.bat, depending on what you need.  
