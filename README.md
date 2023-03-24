@@ -13,6 +13,13 @@ Code can be a little bit messy, so sorry about that.
 
 Run **runclient.bat** or **runserver.bat** depending on which one you need.
 
+### How to run my compiled code on ITMO's servers?
+
+You need to run server code on ITMO server and pass required port to you.
+You can do this by running this command
+`ssh -L [PORT]:localhost:[PORT] s[YOUR STUDENT ID]@se.ifmo.ru -p 2222`
+where \[PORT] is whatever port you choose to use and \[YOUR STUDENT ID] is your student ID. Mine was 338925. Still remember it!
+
 ### Server parameters
 
 * -p \[number]: Port
