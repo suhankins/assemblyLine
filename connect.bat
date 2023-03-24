@@ -1,1 +1,0 @@
-ssh -L 5400:localhost:5400 s338925@se.ifmo.ru -p 2222
