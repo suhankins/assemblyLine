@@ -24,19 +24,15 @@ Where \[PORT] is whatever port you choose to use and \[YOUR STUDENT ID] is your 
 
 ### Server parameters
 
-* -p \[number]: Port
+* -p \[number]: Port, 5400 by default
 * \[fileName]: Load save file
-
-Without parameters listens to localhost:5400
 
 ### Client parameters
 
-1. \[hostname]: Hostname
-2. \[port]: Port
+1. \[hostname]: Hostname, localhost by default
+2. \[port]: Port, 5400 by default
 
 Only in this order!
-
-Without parameters connects to localhost:5400
 
 ## How to assemble .jar file?
 
