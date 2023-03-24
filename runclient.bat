@@ -1,1 +1,1 @@
-java -classpath .;json-20211205.jar assemblyline.Client %*
+java -classpath .;json.jar assemblyline.Client %*

@@ -31,3 +31,5 @@ Server.jar
 .idea/workspace.xml
 
 .idea/*
+
+*.jar
